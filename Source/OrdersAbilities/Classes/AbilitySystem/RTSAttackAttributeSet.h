@@ -1,8 +1,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "AbilitySystemComponent.h"
 #include "AbilitySystem/RTSAttributeSet.h"
 #include "RTSAttackAttributeSet.generated.h"
+
+
+#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
+GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
+GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
+GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
+GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 /**
  * Contains attributes about the attack of a unit or building.
@@ -25,37 +34,38 @@ public:
 
     /** Default attack damage. */
     UPROPERTY(Category = "Attributes|Attack", BlueprintReadOnly, ReplicatedUsing = OnRep_Damage)
-    float Damage;
+    FGameplayAttributeData Damage;
+    ATTRIBUTE_ACCESSORS(URTSAttackAttributeSet, Damage)
+
     UFUNCTION()
-    void OnRep_Damage();
-    static const FGameplayAttribute& DamageAttribute();
+    void OnRep_Damage(const FGameplayAttributeData& OldDamage);
 
     /** Time before the attack can be used again, in seconds. */
     UPROPERTY(Category = "Attributes|Attack", BlueprintReadOnly, ReplicatedUsing = OnRep_Cooldown)
-    float Cooldown;
+    FGameplayAttributeData Cooldown;
+    ATTRIBUTE_ACCESSORS(URTSAttackAttributeSet, Cooldown)
     UFUNCTION()
-    void OnRep_Cooldown();
-    static const FGameplayAttribute& CooldownAttribute();
+    void OnRep_Cooldown(const FGameplayAttributeData& OldCoolDown);
 
     /** Attack range, in cm. */
     UPROPERTY(Category = "Attributes|Attack", BlueprintReadOnly, ReplicatedUsing = OnRep_Range)
-    float Range;
+    FGameplayAttributeData Range;
+    ATTRIBUTE_ACCESSORS(URTSAttackAttributeSet, Range)
     UFUNCTION()
-    void OnRep_Range();
-    static const FGameplayAttribute& RangeAttribute();
+    void OnRep_Range(const FGameplayAttributeData& OldRange);
 
     /**
      * The OutgoingDamageMultiplier of a target is multiplied with incoming damage to modify the loss of hit points of
      * the attacked unit.
      */
     UPROPERTY(Category = "Attributes|Attack", BlueprintReadOnly, ReplicatedUsing = OnRep_OutgoingDamageMultiplier)
-    float OutgoingDamageMultiplier;
+    FGameplayAttributeData OutgoingDamageMultiplier;
+    ATTRIBUTE_ACCESSORS(URTSAttackAttributeSet, OutgoingDamageMultiplier)
     UFUNCTION()
-    void OnRep_OutgoingDamageMultiplier();
-    static const FGameplayAttribute& OutgoingDamageMultiplierAttribute();
+    void OnRep_OutgoingDamageMultiplier(const FGameplayAttributeData& OldOutgoingDamageMultiplier);
 
     //~ Begin UAttributeSet Interface
-    virtual bool ShouldInitProperty(bool FirstInit, UProperty* PropertyToInit) const override;
+    virtual bool ShouldInitProperty(bool FirstInit, FProperty* PropertyToInit) const override;
     virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
     //~ End UAttributeSet Interface
 

@@ -37,7 +37,7 @@ void URTSAbilitySystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProp
     // As APawn::GetNetConnection() is forwarded to their respective controller,
     // we need to change the replication condition for ActivatableAbilities in order
     // to properly replicate to clients.
-    DOREPLIFETIME_CHANGE_CONDITION(URTSAbilitySystemComponent, ActivatableAbilities, COND_None);
+    RESET_REPLIFETIME_CONDITION(URTSAbilitySystemComponent, ActivatableAbilities, COND_None);
 }
 
 FName URTSAbilitySystemComponent::GetName() const

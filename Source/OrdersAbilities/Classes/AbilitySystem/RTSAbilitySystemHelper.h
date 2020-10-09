@@ -8,6 +8,7 @@
 #include "GameplayAbilityTargetTypes.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectTypes.h"
+#include "RTSGameplayAbility.h"
 #include "Text.h"
 #include "Orders/RTSOrderTargetData.h"
 #include "Orders/RTSTargetType.h"

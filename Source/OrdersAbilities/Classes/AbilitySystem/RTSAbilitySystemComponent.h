@@ -31,7 +31,7 @@ class ORDERSABILITIES_API URTSAbilitySystemComponent : public UAbilitySystemComp
 public:
     URTSAbilitySystemComponent();
 
-    void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
     /** Gets the name of the owner of this component. */
     UFUNCTION(Category = RTS, BlueprintPure)

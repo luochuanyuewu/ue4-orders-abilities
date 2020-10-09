@@ -28,81 +28,53 @@ void URTSAttackAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
     DOREPLIFETIME_CONDITION_NOTIFY(URTSAttackAttributeSet, OutgoingDamageMultiplier, COND_None, REPNOTIFY_Always);
 }
 
-void URTSAttackAttributeSet::OnRep_Damage()
+void URTSAttackAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldDamage)
 {
-    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, Damage);
+    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, Damage, OldDamage);
 }
 
-const FGameplayAttribute& URTSAttackAttributeSet::DamageAttribute()
+void URTSAttackAttributeSet::OnRep_Cooldown(const FGameplayAttributeData& OldCoolDown)
 {
-    static FGameplayAttribute Attribute(FindFieldChecked<UProperty>(
-        URTSAttackAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URTSAttackAttributeSet, Damage)));
-    return Attribute;
+    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, Cooldown, OldCoolDown);
 }
 
-void URTSAttackAttributeSet::OnRep_Cooldown()
+void URTSAttackAttributeSet::OnRep_Range(const FGameplayAttributeData& OldRange)
 {
-    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, Cooldown);
+    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, Range, OldRange);
 }
 
-const FGameplayAttribute& URTSAttackAttributeSet::CooldownAttribute()
+void URTSAttackAttributeSet::OnRep_OutgoingDamageMultiplier(const FGameplayAttributeData& OldOutgoingDamageMultiplier)
 {
-    static FGameplayAttribute Attribute(FindFieldChecked<UProperty>(
-        URTSAttackAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URTSAttackAttributeSet, Cooldown)));
-    return Attribute;
+    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, OutgoingDamageMultiplier, OldOutgoingDamageMultiplier);
 }
 
-void URTSAttackAttributeSet::OnRep_Range()
-{
-    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, Range);
-}
 
-const FGameplayAttribute& URTSAttackAttributeSet::RangeAttribute()
-{
-    static FGameplayAttribute Attribute(FindFieldChecked<UProperty>(
-        URTSAttackAttributeSet::StaticClass(), GET_MEMBER_NAME_CHECKED(URTSAttackAttributeSet, Range)));
-    return Attribute;
-}
-
-void URTSAttackAttributeSet::OnRep_OutgoingDamageMultiplier()
-{
-    GAMEPLAYATTRIBUTE_REPNOTIFY(URTSAttackAttributeSet, OutgoingDamageMultiplier);
-}
-
-const FGameplayAttribute& URTSAttackAttributeSet::OutgoingDamageMultiplierAttribute()
-{
-    static FGameplayAttribute Attribute(
-        FindFieldChecked<UProperty>(URTSAttackAttributeSet::StaticClass(),
-                                    GET_MEMBER_NAME_CHECKED(URTSAttackAttributeSet, OutgoingDamageMultiplier)));
-    return Attribute;
-}
-
-bool URTSAttackAttributeSet::ShouldInitProperty(bool FirstInit, UProperty* PropertyToInit) const
+bool URTSAttackAttributeSet::ShouldInitProperty(bool FirstInit, FProperty* PropertyToInit) const
 {
     // We do not want the health property to change when the attribute sets properties where initialized using a curve
     // table.
-    return (PropertyToInit != OutgoingDamageMultiplierAttribute().GetUProperty());
+    return (PropertyToInit != GetOutgoingDamageMultiplierAttribute().GetUProperty());
 }
 
 void URTSAttackAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const
 {
-    if (Attribute == DamageAttribute())
+    if (Attribute == GetDamageAttribute())
     {
         // Note that we can use game play effects to heal units so we can clamp this value with min == 0.
         NewValue = FMath::Clamp(NewValue, 0.0f, MAX_DAMAGE);
     }
 
-    if (Attribute == CooldownAttribute())
+    if (Attribute == GetCooldownAttribute())
     {
         NewValue = FMath::Clamp(NewValue, 0.0f, MAX_COOLDOWN);
     }
 
-    if (Attribute == RangeAttribute())
+    if (Attribute == GetRangeAttribute())
     {
         NewValue = FMath::Clamp(NewValue, 0.0f, MAX_RANGE);
     }
 
-    if (Attribute == OutgoingDamageMultiplierAttribute())
+    if (Attribute == GetOutgoingDamageMultiplierAttribute())
     {
         NewValue = FMath::Clamp(NewValue, 0.0f, MAX_OUTGOING_DAMAGE_MULTIPLIER);
     }

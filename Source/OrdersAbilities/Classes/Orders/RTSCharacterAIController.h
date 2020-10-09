@@ -50,8 +50,7 @@ public:
     FVector GetHomeLocation();
 
 protected:
-    virtual void Possess(APawn* InPawn) override;
-
+    virtual void OnPossess(APawn* InPawn) override;
 private:
     /** Collision object types that are used to detect attack targets. */
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "RTS", meta = (AllowPrivateAccess = true))

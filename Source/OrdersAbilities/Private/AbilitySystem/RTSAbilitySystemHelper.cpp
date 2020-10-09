@@ -1007,10 +1007,10 @@ TArray<FGameplayAttribute> URTSAbilitySystemHelper::FindGameplayAttributes()
         UClass* Class = *ClassIt;
         if (Class->IsChildOf(UAttributeSet::StaticClass()) && !Class->ClassGeneratedBy)
         {
-            for (TFieldIterator<UProperty> PropertyIt(Class, EFieldIteratorFlags::ExcludeSuper); PropertyIt;
+            for (TFieldIterator<FProperty> PropertyIt(Class, EFieldIteratorFlags::ExcludeSuper); PropertyIt;
                  ++PropertyIt)
             {
-                UProperty* Property = *PropertyIt;
+                FProperty* Property = *PropertyIt;
                 Attributes.Add(FGameplayAttribute(Property));
             }
         }
